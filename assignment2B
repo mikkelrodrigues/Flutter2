@@ -1,0 +1,502 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Green Valley Grocery',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        scaffoldBackgroundColor: Colors.grey[100], // Light grey background
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent, // Transparent for custom layout
+          elevation: 0,
+          foregroundColor: Colors.black,
+        ),
+        fontFamily: 'Roboto', // Example font
+      ),
+      home: const GroceryHomeScreen(),
+    );
+  }
+}
+
+class GroceryHomeScreen extends StatefulWidget {
+  const GroceryHomeScreen({super.key});
+
+  @override
+  State<GroceryHomeScreen> createState() => _GroceryHomeScreenState();
+}
+
+class _GroceryHomeScreenState extends State<GroceryHomeScreen> {
+  // Dummy Data for Categories
+  final List<Map<String, dynamic>> _categories = [
+    {'name': 'Meats', 'icon': Icons.set_meal},
+    {'name': 'Fresh', 'icon': Icons.local_florist}, // Or a vegetable icon
+    {'name': 'Bakery', 'icon': Icons.cake},
+    {'name': 'Grains', 'icon': Icons.grain},
+    {'name': 'Organic', 'icon': Icons.eco},
+    {'name': 'Dairy', 'icon': Icons.local_drink},
+  ];
+
+  // Dummy Data for Popular Items
+  final List<Map<String, dynamic>> _popularItems = [
+    {
+      'name': 'Farm Fresh Produce',
+      'price': 10.00,
+      'rating': 3.5,
+      'discount': '5%',
+      'image':
+          'https://media.istockphoto.com/id/1454047113/photo/vegetable-at-a-farmers-market.jpg?s=612x612&w=0&k=20&c=bHxCQsaaD45L3Y2ixjF0104u2ZdYHoHRGdzDGxWkDSo=',
+      'deliveryTime': '10 min',
+    },
+    {
+      'name': 'Organic Chicken',
+      'price': 15.50,
+      'rating': 4.2,
+      'discount': '10%',
+      'image':
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnn7oFkdvbwU6Oi5AF4y9m5nPd760lYx3T2g&s',
+      'deliveryTime': '15 min',
+    },
+    {
+      'name': 'Artisan Bread Loaf',
+      'price': 4.75,
+      'rating': 4.8,
+      'discount': null,
+      'image':
+          'https://preppykitchen.com/wp-content/uploads/2022/03/Artisan-Bread-Feature.jpg',
+      'deliveryTime': '8 min',
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Top Bar
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Location
+                  Expanded(
+                    child: Row(
+                      children: [
+                        const Icon(Icons.location_on, color: Colors.black54),
+                        const SizedBox(width: 8),
+                        Expanded( // Ensure location text column is flexible
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Delivery location',
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 12,
+                                ),
+                                overflow: TextOverflow.ellipsis, // Add ellipsis for overflow
+                                maxLines: 1, // Limit to single line
+                              ),
+                              const Text(
+                                'Green Valley Point',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis, // Add ellipsis for overflow
+                                maxLines: 1, // Limit to single line
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Search and Notification Icons
+                  Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.search, color: Colors.black87),
+                          onPressed: () {
+                            // Search action
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.notifications,
+                            color: Colors.black87,
+                          ),
+                          onPressed: () {
+                            // Notification action
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Delivery / Pickup Toggle
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.delivery_dining, size: 18),
+                            SizedBox(width: 5),
+                            Text(
+                              'Delivery',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          // No background color for inactive
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.shopping_bag_outlined, size: 18),
+                            SizedBox(width: 5),
+                            Text('Pickup'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Categories
+            SizedBox(
+              height: 90, // Height for horizontal scroll
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _categories.length,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                itemBuilder: (ctx, index) {
+                  final category = _categories[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            category['icon'] as IconData, // Cast IconData
+                            size: 30,
+                            color: Colors.black54,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          category['name'] as String, // Cast String
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Popular Items Section Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Popular items',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      // See All action
+                    },
+                    child: const Text(
+                      'See All',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 15),
+
+            // Popular Items List (using a ListView for horizontal scroll)
+            SizedBox(
+              height: 250, // Fixed height for each product card
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _popularItems.length,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                itemBuilder: (ctx, index) {
+                  final item = _popularItems[index];
+                  return Container(
+                    width: 200, // Fixed width for each product card
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          offset: const Offset(
+                            0,
+                            3,
+                          ), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(15),
+                          ),
+                          child: Image.network(
+                            item['image'] as String, // Cast String
+                            height: 120,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
+                                  height: 120,
+                                  color: Colors.grey[300],
+                                  child: const Icon(
+                                    Icons.broken_image,
+                                    size: 50,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                          ),
+                        ),
+                        Expanded( // Use Expanded to ensure the details fit within remaining space
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item['name'] as String, // Cast String
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '\$${(item['price'] as double).toStringAsFixed(2)}', // Cast double
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    if (item['discount'] != null)
+                                      Text(
+                                        'Discount ${item['discount'] as String}', // Cast String
+                                        style: TextStyle(
+                                          color: Colors.red[400],
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        maxLines: 1, // Add maxLines for discount text
+                                        overflow: TextOverflow.ellipsis, // Add overflow for discount text
+                                      ),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.star,
+                                      color: Colors.amber[600],
+                                      size: 16,
+                                    ),
+                                    Text(
+                                      ' ${(item['rating'] as double).toString()}', // Cast double
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Delivered and Time info
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.check_circle_outline,
+                        color: Colors.green,
+                        size: 18,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        'Delivered',
+                        style: TextStyle(fontSize: 14, color: Colors.green),
+                        overflow: TextOverflow.ellipsis, // Add overflow
+                        maxLines: 1, // Add maxLines
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.access_time,
+                        color: Colors.grey[600],
+                        size: 18,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        _popularItems[0]['deliveryTime'] as String, // Cast String
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        overflow: TextOverflow.ellipsis, // Add overflow
+                        maxLines: 1, // Add maxLines
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Placeholder for the second product card, if you were to expand the list
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Container(
+                height:
+                    150, // Approx height of the next visible part of the card
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  'More content (e.g., Meat items)',
+                  style: TextStyle(color: Colors.grey[500]),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+      // Bottom Navigation Bar
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.green,
+        unselectedItemColor: Colors.grey,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag_outlined), // Shopping bag for cart
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border), // Wishlist/Favorites
+            label: 'Favorites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline), // User profile
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+}
