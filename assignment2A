@@ -1,0 +1,357 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Product Details UI',
+      theme: ThemeData(
+        primarySwatch: Colors.green, // Base color
+        scaffoldBackgroundColor: const Color(0xFFF0F5EE), // Light green-grey background
+        fontFamily: 'Roboto', // Example font
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          foregroundColor: Colors.black,
+          iconTheme: IconThemeData(color: Colors.black), // For default back button
+        ),
+      ),
+      home: const ProductDetailScreen(),
+    );
+  }
+}
+
+class ProductDetailScreen extends StatefulWidget {
+  const ProductDetailScreen({super.key});
+
+  @override
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+}
+
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  // Dummy Data for the Product
+  final String productName = 'Farm Fresh Produce';
+  final double productPrice = 10.00;
+  final String productDiscount = '5%';
+  final String productImage = 'https://media.istockphoto.com/id/1454047113/photo/vegetable-at-a-farmers-market.jpg?s=612x612&w=0&k=20&c=bHxCQsaaD45L3Y2ixjF0104u2ZdYHoHRGdzDGxWkDSo='; // Placeholder image
+  final double productRating = 3.5;
+  final String deliveryStatus = 'Delivered';
+  final String deliveryTime = '10 min';
+  final String productFullDescription =
+      'Enjoy farm-fresh produce, handpicked for quality, packed with nutrition, and delivered with care! Our selection includes seasonal vegetables and fruits sourced directly from local farms. Perfect for a healthy lifestyle. Loaded with vitamins and minerals. We ensure that every item meets our strict quality standards, providing you with the freshest ingredients for your meals. Our commitment to sustainable farming practices means you can enjoy delicious produce while supporting environmentally friendly agriculture. Add a burst of natural flavor to your dishes with our premium selection.';
+
+  int _quantity = 1;
+  bool _showFullDescription = false;
+
+  void _incrementQuantity() {
+    setState(() {
+      _quantity++;
+    });
+  }
+
+  void _decrementQuantity() {
+    setState(() {
+      if (_quantity > 1) {
+        _quantity--;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () {
+                Navigator.of(context).pop(); // Go back
+              },
+            ),
+          ),
+        ),
+        title: const Text(
+          'Products Details',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.share_outlined, color: Colors.black),
+                onPressed: () {
+                  // Handle share action
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Main Content Card
+            Container(
+              margin: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(25),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 2,
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Product Image
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      productImage, // Correctly using the productImage variable
+                      width: double.infinity,
+                      height: 200,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        height: 200,
+                        color: Colors.grey[300],
+                        alignment: Alignment.center,
+                        child: const Icon(Icons.broken_image, size: 80, color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+
+                  // Product Name, Price, Discount, and Map Icon
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              productName,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Row(
+                              children: [
+                                Text(
+                                  '\$${productPrice.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  'Discount $productDiscount',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.red[400],
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Map-like icon
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Icon(
+                          Icons.location_on_outlined, // Using a similar icon
+                          color: Colors.grey,
+                          size: 30,
+                        ),
+                        // You could use a custom painter here for the exact pattern
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+
+                  // Delivered, Time, Rating
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.check_circle_outline, color: Colors.green, size: 20),
+                          const SizedBox(width: 5),
+                          Text(
+                            deliveryStatus,
+                            style: TextStyle(color: Colors.green[700], fontSize: 14),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.access_time, color: Colors.grey[600], size: 20),
+                          const SizedBox(width: 5),
+                          Text(
+                            deliveryTime,
+                            style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.star, color: Colors.amber, size: 20),
+                          const SizedBox(width: 5),
+                          Text(
+                            productRating.toStringAsFixed(1),
+                            style: TextStyle(color: Colors.black87, fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+
+                  // Product Description
+                  const Text(
+                    'Description',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _showFullDescription = !_showFullDescription;
+                      });
+                    },
+                    child: Text(
+                      _showFullDescription
+                          ? productFullDescription
+                          : (productFullDescription.length > 150
+                              ? '${productFullDescription.substring(0, 150)}...'
+                              : productFullDescription),
+                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                      maxLines: _showFullDescription ? null : 4,
+                      overflow: _showFullDescription ? TextOverflow.visible : TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (productFullDescription.length > 150)
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _showFullDescription = !_showFullDescription;
+                        });
+                      },
+                      child: Text(_showFullDescription ? 'Show less' : 'Show more'),
+                    ),
+                  const SizedBox(height: 20),
+
+                  // Quantity Selector
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Quantity',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.remove, color: Colors.black87),
+                              onPressed: _decrementQuantity,
+                              splashRadius: 20, // To make the tap area smaller visually
+                            ),
+                            Text(
+                              _quantity.toString(),
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add, color: Colors.black87),
+                              onPressed: _incrementQuantity,
+                              splashRadius: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Add to Cart Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle add to cart
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Added $_quantity of $productName to cart!')),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green[700], // Button color
+                        foregroundColor: Colors.white, // Text color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        elevation: 0, // No shadow
+                      ),
+                      child: const Text(
+                        'Add to Cart',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
